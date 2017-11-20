@@ -12,11 +12,13 @@ addons:
     - libboost-system-dev
     - libboost-filesystem-dev
     - libboost-date-time-dev
-    - libboost-locale-dev
     - libfreeimage-dev
     - libcurl4-openssl-dev
     - libasound2-dev
     - libgl1-mesa-dev
+    - libvlc-dev
+    - libvlccore-dev
+    - vlc-nox
 
 script:
 - cmake .
