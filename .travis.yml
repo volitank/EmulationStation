@@ -1,7 +1,25 @@
 language: cpp
+compiler: gcc
+
+before_script:
+  - if [[ $TRAVIS_OS_NAME == linux ]]; then
+      sudo apt-get -qq update &&
+      sudo apt-get install -y
+        build-essential
+        cmake
+        fonts-droid
+        libsdl2-dev
+        libboost-system-dev
+        libboost-filesystem-dev
+        libboost-date-time-dev
+        libboost-locale-dev
+        libfreeimage-dev
+        libfreetype6-dev
+        libeigen3-dev
+        libcurl4-openssl-dev
+        libasound2-dev
+        libgl1-mesa-dev
+    ; fi
 script:
 - cmake .
 - make
-compiler: gcc
-before_install:
-- sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-date-time-dev libboost-locale-dev libfreeimage-dev libcurl4-openssl-dev libasound2-dev fonts-droid libvlc-dev libvlccore-dev vlc-nox
