@@ -1,6 +1,9 @@
 language: cpp
 compiler: gcc
 
+sudo: required
+dist: trusty
+
 before_script:
   - if [[ $TRAVIS_OS_NAME == linux ]]; then
       sudo apt-get -qq update &&
