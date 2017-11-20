@@ -2,24 +2,22 @@ language: cpp
 compiler: gcc
 
 sudo: required
-dist: precise
+dist: trusty
 
-before_script:
-  - if [[ $TRAVIS_OS_NAME == linux ]]; then
-      sudo apt-get -qq update &&
-      sudo apt-get install -y
-        fonts-droid
-        libsdl2-dev
-        libboost-system-dev
-        libboost-filesystem-dev
-        libboost-date-time-dev
-        libboost-locale-dev
-        libfreeimage-dev
-        libeigen3-dev
-        libcurl4-openssl-dev
-        libasound2-dev
-        libgl1-mesa-dev
-    ; fi
+addons:
+  apt:
+    packages:
+    - fonts-droid
+    - libsdl2-dev
+    - libboost-system-dev
+    - libboost-filesystem-dev
+    - libboost-date-time-dev
+    - libboost-locale-dev
+    - libfreeimage-dev
+    - libcurl4-openssl-dev
+    - libasound2-dev
+    - libgl1-mesa-dev
+
 script:
 - cmake .
 - make
