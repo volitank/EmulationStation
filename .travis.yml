@@ -6,7 +6,10 @@ dist: trusty
 
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+    - g++-4.9
     - fonts-droid
     - libsdl2-dev
     - libboost-system-dev
@@ -19,6 +22,8 @@ addons:
     - libvlc-dev
     - libvlccore-dev
     - vlc-nox
+env:
+- MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
 
 script:
 - cmake .
