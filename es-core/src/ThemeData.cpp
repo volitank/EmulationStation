@@ -9,6 +9,7 @@
 #include <pugixml/src/pugixml.hpp>
 #include <algorithm>
 
+// clang-format off
 std::vector<std::string> ThemeData::sSupportedViews { { "system" }, { "basic" }, { "detailed" }, { "grid" }, { "video" } };
 std::vector<std::string> ThemeData::sSupportedFeatures { { "video" }, { "carousel" }, { "z-index" } };
 
@@ -149,6 +150,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "maxLogoCount", FLOAT },
 		{ "zIndex", FLOAT } } }
 };
+// clang-format on
 
 #define MINIMUM_THEME_FORMAT_VERSION 3
 #define CURRENT_THEME_FORMAT_VERSION 6

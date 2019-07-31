@@ -1,0 +1,29 @@
+BasedOnStyle: Mozilla
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+ColumnLimit: 0
+CompactNamespaces: false
+IndentWidth: 8
+IndentWrappedFunctionNames: false
+Language: Cpp
+NamespaceIndentation: All
+Standard: Cpp11
+TabWidth: 8
+UseTab: ForIndentation
+SortIncludes: false
+SpaceBeforeParens: false
+Cpp11BracedListStyle: true
+AccessModifierOffset: -8
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None

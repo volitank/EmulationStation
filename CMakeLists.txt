@@ -81,6 +81,10 @@ if(DEFINED libCEC_FOUND)
 endif()
 
 #-------------------------------------------------------------------------------
+# Including custom cmake rules
+include(CMake/Utils/clang-cxx-dev-tools.cmake)
+
+#-------------------------------------------------------------------------------
 
 if(MSVC)
     set(CMAKE_DEBUG_POSTFIX "d")
