@@ -6,6 +6,7 @@
 #include "resources/TextureResource.h"
 #include "InputManager.h"
 #include "Log.h"
+#include "MenuThemeData.h"
 #include "Renderer.h"
 #include "Scripting.h"
 #include <algorithm>
@@ -16,6 +17,8 @@ Window::Window() : mNormalizeNextUpdate(false), mFrameTimeElapsed(0), mFrameCoun
 {
 	mHelp = new HelpComponent(this);
 	mBackgroundOverlay = new ImageComponent(this);
+
+//	MenuThemeData::getInstance()->loadTheme();
 }
 
 Window::~Window()

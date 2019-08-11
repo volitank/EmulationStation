@@ -1,6 +1,7 @@
 #include "components/SliderComponent.h"
 
 #include "resources/Font.h"
+#include "MenuThemeData.h"
 #include "Renderer.h"
 
 #define MOVE_REPEAT_DELAY 500
@@ -14,10 +15,13 @@ SliderComponent::SliderComponent(Window* window, float min, float max, float inc
 	// some sane default value
 	mValue = (max + min) / 2;
 
+	auto menuTheme = MenuThemeData::getInstance()->getCurrentTheme();
+
 	mKnob.setOrigin(0.5f, 0.5f);
-	mKnob.setImage(":/slider_knob.svg");
-	
-	setSize(Renderer::getScreenWidth() * 0.15f, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight());
+	mKnob.setImage(menuTheme->iconSet.knob);
+
+	mKnob.setColorShift(menuTheme->text.color);
+	setSize(Renderer::getScreenWidth() * 0.15f, menuTheme->text.font->getLetterHeight());
 }
 
 bool SliderComponent::input(InputConfig* config, Input input)

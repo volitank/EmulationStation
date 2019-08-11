@@ -4,6 +4,9 @@
 
 #include "components/MenuComponent.h"
 #include "GuiComponent.h"
+#include "MenuThemeData.h"
+
+class GuiSettings;
 
 class GuiMenu : public GuiComponent
 {
@@ -16,7 +19,8 @@ public:
 	HelpStyle getHelpStyle() override;
 
 private:
-	void addEntry(const char* name, unsigned int color, bool add_arrow, const std::function<void()>& func);
+	void addSettingsEntry(GuiSettings* s, const char* name, bool add_arrow, const std::function<void()>& func);
+	void addEntry(const char* name, bool add_arrow, const std::function<void()>& func);
 	void addVersionInfo();
 	void openCollectionSystemSettings();
 	void openConfigInput();
@@ -29,6 +33,8 @@ private:
 
 	MenuComponent mMenu;
 	TextComponent mVersion;
+
+	std::shared_ptr<MenuTheme> mMenuTheme;
 };
 
 #endif // ES_APP_GUIS_GUI_MENU_H

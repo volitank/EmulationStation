@@ -3,6 +3,7 @@
 #include "utils/StringUtil.h"
 #include "views/ViewController.h"
 #include "Log.h"
+#include "MenuThemeData.h"
 #include "Window.h"
 
 UIModeController *  UIModeController::sInstance = NULL;
@@ -20,6 +21,7 @@ UIModeController::UIModeController()
 {
 	mPassKeySequence = Settings::getInstance()->getString("UIMode_passkey");
 	mCurrentUIMode = Settings::getInstance()->getString("UIMode");
+	MenuThemeData::getInstance()->loadTheme();
 }
 
 void UIModeController::monitorUIMode()

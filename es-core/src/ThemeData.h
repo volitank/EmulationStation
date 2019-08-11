@@ -79,6 +79,7 @@ struct ThemeSet
 
 	inline std::string getName() const { return Utils::FileSystem::getStem(path); }
 	inline std::string getThemePath(const std::string& system) const { return path + "/" + system + "/theme.xml"; }
+	inline std::string getDefaultThemePath() const { return path + "/theme.xml"; }
 };
 
 class ThemeData
@@ -158,6 +159,7 @@ public:
 
 	static std::map<std::string, ThemeSet> getThemeSets();
 	static std::string getThemeFromCurrentSet(const std::string& system);
+	static std::string getDefaultThemeFromCurrentSet();
 
 private:
 	static std::map< std::string, std::map<std::string, ElementPropertyType> > sElementMap;

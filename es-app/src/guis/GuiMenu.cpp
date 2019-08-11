@@ -13,6 +13,7 @@
 #include "views/ViewController.h"
 #include "CollectionSystemManager.h"
 #include "EmulationStation.h"
+#include "MenuThemeData.h"
 #include "Scripting.h"
 #include "SystemData.h"
 #include "VolumeControl.h"
@@ -21,27 +22,29 @@
 
 GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window)
 {
+	mMenuTheme = MenuThemeData::getInstance()->getCurrentTheme();
+
 	bool isFullUI = UIModeController::getInstance()->isUIModeFull();
 
 	if (isFullUI)
-		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
+		addEntry("SCRAPER", true, [this] { openScraperSettings(); });
 
-	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
+	addEntry("SOUND SETTINGS", true, [this] { openSoundSettings(); });
 
-
-	if (isFullUI)
-		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
 
 	if (isFullUI)
-		addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
+		addEntry("UI SETTINGS", true, [this] { openUISettings(); });
 
 	if (isFullUI)
-		addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
+		addEntry("GAME COLLECTION SETTINGS", true, [this] { openCollectionSystemSettings(); });
 
 	if (isFullUI)
-		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
+		addEntry("OTHER SETTINGS", true, [this] { openOtherSettings(); });
 
-	addEntry("QUIT", 0x777777FF, true, [this] {openQuitMenu(); });
+	if (isFullUI)
+		addEntry("CONFIGURE INPUT", true, [this] { openConfigInput(); });
+
+	addEntry("QUIT", true, [this] {openQuitMenu(); });
 
 	addChild(&mMenu);
 	addVersionInfo();
@@ -71,17 +74,10 @@ void GuiMenu::openScraperSettings()
 	s->addSaveFunc([scrape_ratings] { Settings::getInstance()->setBool("ScrapeRatings", scrape_ratings->getState()); });
 
 	// scrape now
-	ComponentListRow row;
 	auto openScrapeNow = [this] { mWindow->pushGui(new GuiScraperStart(mWindow)); };
 	std::function<void()> openAndSave = openScrapeNow;
 	openAndSave = [s, openAndSave] { s->save(); openAndSave(); };
-	row.makeAcceptInputHandler(openAndSave);
-
-	auto scrape_now = std::make_shared<TextComponent>(mWindow, "SCRAPE NOW", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto bracket = makeArrow(mWindow);
-	row.addElement(scrape_now, true);
-	row.addElement(bracket, false);
-	s->addRow(row);
+	addSettingsEntry(s, "SCRAPE NOW", true, openAndSave);
 
 	mWindow->pushGui(s);
 }
@@ -230,13 +226,7 @@ void GuiMenu::openUISettings()
 		}
 	});
 
-	// screensaver
-	ComponentListRow screensaver_row;
-	screensaver_row.elements.clear();
-	screensaver_row.addElement(std::make_shared<TextComponent>(mWindow, "SCREENSAVER SETTINGS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	screensaver_row.addElement(makeArrow(mWindow), false);
-	screensaver_row.makeAcceptInputHandler(std::bind(&GuiMenu::openScreensaverOptions, this));
-	s->addRow(screensaver_row);
+	addSettingsEntry(s, "SCREENSAVER SETTINGS", true, [this] { openScreensaverOptions(); });
 
 	// quick system select (left/right in game list view)
 	auto quick_sys_select = std::make_shared<SwitchComponent>(mWindow);
@@ -274,7 +264,7 @@ void GuiMenu::openUISettings()
 			&& PowerSaver::getMode() == PowerSaver::INSTANT)
 		{
 			Settings::getInstance()->setString("PowerSaverMode", "default");
-			PowerSaver::init();
+		 		PowerSaver::init();
 		}
 		Settings::getInstance()->setString("TransitionStyle", transition_style->getSelected());
 	});
@@ -306,6 +296,7 @@ void GuiMenu::openUISettings()
 			if(needReload)
 			{
 				Scripting::fireEvent("theme-changed", theme_set->getSelected(), oldTheme);
+				MenuThemeData::getInstance()->loadTheme();
 				CollectionSystemManager::get()->updateSystemsList();
 				ViewController::get()->goToStart();
 				ViewController::get()->reloadAll(); // TODO - replace this with some sort of signal-based implementation
@@ -472,58 +463,58 @@ void GuiMenu::openQuitMenu()
 	ComponentListRow row;
 	if (UIModeController::getInstance()->isUIModeFull())
 	{
-		row.makeAcceptInputHandler([window] {
-			window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
-				[] {
-				Scripting::fireEvent("quit");
-				if(quitES("/tmp/es-restart") != 0)
-					LOG(LogWarning) << "Restart terminated with non-zero result!";
-			}, "NO", nullptr));
-		});
-		row.addElement(std::make_shared<TextComponent>(window, "RESTART EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		s->addRow(row);
-
-
+		addSettingsEntry(s, "RESTART EMULATIONSTATION", false,
+			[window] {
+				window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
+					[] {
+						Scripting::fireEvent("QUIT");
+						if(quitES("/tmp/es-restart") != 0)
+							LOG(LogWarning) << "Restart terminated with non-zero result!";
+					}, "NO", nullptr)
+				);
+			}
+		);
 
 		if(Settings::getInstance()->getBool("ShowExit"))
 		{
-			row.elements.clear();
-			row.makeAcceptInputHandler([window] {
-				window->pushGui(new GuiMsgBox(window, "REALLY QUIT?", "YES",
-					[] {
-					Scripting::fireEvent("quit");
-					quitES("");
-				}, "NO", nullptr));
-			});
-			row.addElement(std::make_shared<TextComponent>(window, "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-			s->addRow(row);
+			addSettingsEntry(s, "QUIT EMULATIONSTATION", false,
+				[window] {
+					window->pushGui(new GuiMsgBox(window, "REALLY QUIT?", "YES",
+						[] {
+							Scripting::fireEvent("QUIT");
+							quitES("");
+						}, "NO", nullptr)
+					);
+				}
+			);
 		}
 	}
-	row.elements.clear();
-	row.makeAcceptInputHandler([window] {
-		window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
-			[] {
-			Scripting::fireEvent("quit", "reboot");
-			Scripting::fireEvent("reboot");
-			if (quitES("/tmp/es-sysrestart") != 0)
-				LOG(LogWarning) << "Restart terminated with non-zero result!";
-		}, "NO", nullptr));
-	});
-	row.addElement(std::make_shared<TextComponent>(window, "RESTART SYSTEM", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	s->addRow(row);
 
-	row.elements.clear();
-	row.makeAcceptInputHandler([window] {
-		window->pushGui(new GuiMsgBox(window, "REALLY SHUTDOWN?", "YES",
-			[] {
-			Scripting::fireEvent("quit", "shutdown");
-			Scripting::fireEvent("shutdown");
-			if (quitES("/tmp/es-shutdown") != 0)
-				LOG(LogWarning) << "Shutdown terminated with non-zero result!";
-		}, "NO", nullptr));
-	});
-	row.addElement(std::make_shared<TextComponent>(window, "SHUTDOWN SYSTEM", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	s->addRow(row);
+	addSettingsEntry(s, "RESTART SYSTEM", false,
+		 [window] {
+			 window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
+				[] {
+				   Scripting::fireEvent("quit", "reboot");
+				   Scripting::fireEvent("reboot");
+				   if (quitES("/tmp/es-sysrestart") != 0)
+					   LOG(LogWarning) << "Restart terminated with non-zero result!";
+				}, "NO", nullptr)
+			 );
+		 }
+	);
+
+	addSettingsEntry(s, "SHUTDOWN SYSTEM", false,
+		[window] {
+			window->pushGui(new GuiMsgBox(window, "REALLY SHUTDOWN?", "YES",
+				[] {
+					Scripting::fireEvent("quit", "shutdown");
+					Scripting::fireEvent("shutdown");
+					if (quitES("/tmp/es-shutdown") != 0)
+							LOG(LogWarning) << "Shutdown terminated with non-zero result!";
+				}, "NO", nullptr)
+			);
+		}
+	);
 
 	mWindow->pushGui(s);
 }
@@ -553,9 +544,10 @@ void GuiMenu::onSizeChanged()
 	mVersion.setPosition(0, mSize.y() - mVersion.getSize().y());
 }
 
-void GuiMenu::addEntry(const char* name, unsigned int color, bool add_arrow, const std::function<void()>& func)
+void GuiMenu::addEntry(const char* name, bool add_arrow, const std::function<void()>& func)
 {
-	std::shared_ptr<Font> font = Font::get(FONT_SIZE_MEDIUM);
+	std::shared_ptr<Font> font = mMenuTheme->text.font;
+	unsigned int color = mMenuTheme->text.color;
 
 	// populate the list
 	ComponentListRow row;
@@ -563,13 +555,32 @@ void GuiMenu::addEntry(const char* name, unsigned int color, bool add_arrow, con
 
 	if(add_arrow)
 	{
-		std::shared_ptr<ImageComponent> bracket = makeArrow(mWindow);
-		row.addElement(bracket, false);
+		row.addElement(makeArrow(mWindow), false);
 	}
 
 	row.makeAcceptInputHandler(func);
 
 	mMenu.addRow(row);
+}
+
+void GuiMenu::addSettingsEntry(GuiSettings* s, const char* name, bool add_arrow, const std::function<void()>& func)
+{
+	std::shared_ptr<Font> font = mMenuTheme->text.font;
+	unsigned int color = mMenuTheme->text.color;
+
+	// populate the list
+	ComponentListRow row;
+	row.elements.clear(); // is this needed?
+	row.addElement(std::make_shared<TextComponent>(mWindow, name, font, color), true);
+
+	if(add_arrow)
+	{
+		row.addElement(makeArrow(mWindow), false);
+	}
+
+	row.makeAcceptInputHandler(func);
+
+	s->addRow(row);
 }
 
 bool GuiMenu::input(InputConfig* config, Input input)

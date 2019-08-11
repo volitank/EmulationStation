@@ -9,7 +9,7 @@
 #include <pugixml/src/pugixml.hpp>
 #include <algorithm>
 
-std::vector<std::string> ThemeData::sSupportedViews { { "system" }, { "basic" }, { "detailed" }, { "grid" }, { "video" } };
+std::vector<std::string> ThemeData::sSupportedViews { { "system" }, { "basic" }, { "detailed" }, { "grid" }, { "video" }, { "menu" } };
 std::vector<std::string> ThemeData::sSupportedFeatures { { "video" }, { "carousel" }, { "z-index" } };
 
 std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> ThemeData::sElementMap {
@@ -147,7 +147,46 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "logoSize", NORMALIZED_PAIR },
 		{ "logoAlignment", STRING },
 		{ "maxLogoCount", FLOAT },
-		{ "zIndex", FLOAT } } }
+		{ "zIndex", FLOAT } } },
+	{ "menuBackground", {
+		{ "color", COLOR },
+		{ "path", PATH },
+		{ "fadePath", PATH } } },
+	{ "menuIcons", {
+		{ "iconSystem", PATH },
+		{ "iconUpdates", PATH },
+		{ "iconControllers", PATH },
+		{ "iconGames", PATH },
+		{ "iconUI", PATH },
+		{ "iconSound", PATH },
+		{ "iconNetwork", PATH },
+		{ "iconScraper", PATH },
+		{ "iconAdvanced", PATH },
+		{ "iconQuit", PATH } } },
+	{ "menuSwitch", {
+ 		{ "pathOn", PATH },
+		{ "pathOff", PATH } } },
+	{ "menuSlider", {
+		 { "path", PATH } } },
+	{ "menuButton", {
+		{ "path", PATH },
+		{ "filledPath", PATH } } },
+	{ "menuText", {
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT },
+		{ "color", COLOR },
+		{ "separatorColor", COLOR },
+		{ "selectedColor", COLOR },
+		{ "selectorColor", COLOR },
+		{ "selectorColorEnd", COLOR } } },
+	{ "menuTextSmall", {
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT},
+		{ "color", COLOR },
+		{ "selectedColor", COLOR },
+		{ "selectorColor", COLOR },
+		{ "selectorColor", COLOR } } }
+
 };
 
 #define MINIMUM_THEME_FORMAT_VERSION 3
@@ -563,6 +602,26 @@ std::map<std::string, ThemeSet> ThemeData::getThemeSets()
 	}
 
 	return sets;
+}
+
+std::string ThemeData::getDefaultThemeFromCurrentSet()
+{
+	std::map<std::string, ThemeSet> themeSets = ThemeData::getThemeSets();
+	if(themeSets.empty())
+	{
+		// no theme sets available
+		return "";
+	}
+
+	std::map<std::string, ThemeSet>::const_iterator set = themeSets.find(Settings::getInstance()->getString("ThemeSet"));
+	if(set == themeSets.cend())
+	{
+		// currently selected theme set is missing, so just pick the first available set
+		set = themeSets.cbegin();
+		Settings::getInstance()->setString("ThemeSet", set->first);
+	}
+
+	return set->second.getDefaultThemePath();
 }
 
 std::string ThemeData::getThemeFromCurrentSet(const std::string& system)

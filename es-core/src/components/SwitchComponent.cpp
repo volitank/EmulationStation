@@ -1,3 +1,4 @@
+#include "MenuThemeData.h"
 #include "SwitchComponent.h"
 
 #include "resources/Font.h"
@@ -5,8 +6,10 @@
 
 SwitchComponent::SwitchComponent(Window* window, bool state) : GuiComponent(window), mImage(window), mState(state)
 {
-	mImage.setImage(":/off.svg");
-	mImage.setResize(0, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight());
+	auto menuTheme = MenuThemeData::getInstance()->getCurrentTheme();
+	mImage.setImage(mState ? menuTheme->iconSet.on : menuTheme->iconSet.off);
+	mImage.setResize(0, menuTheme->text.font->getLetterHeight());
+	mImage.setColorShift(menuTheme->text.color);
 	mSize = mImage.getSize();
 }
 

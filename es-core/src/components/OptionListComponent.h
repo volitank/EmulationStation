@@ -2,8 +2,10 @@
 #ifndef ES_CORE_COMPONENTS_OPTION_LIST_COMPONENT_H
 #define ES_CORE_COMPONENTS_OPTION_LIST_COMPONENT_H
 
+#include <MenuThemeData.h>
 #include "GuiComponent.h"
 #include "Log.h"
+#include "MenuThemeData.h"
 #include "Window.h"
 
 //Used to display a list of options.
@@ -39,7 +41,9 @@ private:
 		OptionListPopup(Window* window, OptionListComponent<T>* parent, const std::string& title) : GuiComponent(window),
 			mMenu(window, title.c_str()), mParent(parent)
 		{
-			auto font = Font::get(FONT_SIZE_MEDIUM);
+			auto menuTheme = MenuThemeData::getInstance()->getCurrentTheme();
+			auto font = menuTheme->text.font;
+			auto color = menuTheme->text.color;
 			ComponentListRow row;
 
 			// for select all/none
@@ -48,7 +52,7 @@ private:
 			for(auto it = mParent->mEntries.begin(); it != mParent->mEntries.end(); it++)
 			{
 				row.elements.clear();
-				row.addElement(std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(it->name), font, 0x777777FF), true);
+				row.addElement(std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(it->name), font, color), true);
 
 				OptionListData& e = *it;
 
@@ -58,6 +62,7 @@ private:
 					auto checkbox = std::make_shared<ImageComponent>(mWindow);
 					checkbox->setImage(it->selected ? CHECKED_PATH : UNCHECKED_PATH);
 					checkbox->setResize(0, font->getLetterHeight());
+					checkbox->setColorShift(color);
 					row.addElement(checkbox, false);
 
 					// input handler
@@ -137,9 +142,12 @@ public:
 	OptionListComponent(Window* window, const std::string& name, bool multiSelect = false) : GuiComponent(window), mMultiSelect(multiSelect), mName(name),
 		 mText(window), mLeftArrow(window), mRightArrow(window)
 	{
-		auto font = Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT);
+		auto menuTheme = MenuThemeData::getInstance()->getCurrentTheme();
+		auto font = menuTheme->text.font;
+		auto color = menuTheme->text.color;
+
 		mText.setFont(font);
-		mText.setColor(0x777777FF);
+		mText.setColor(color);
 		mText.setHorizontalAlignment(ALIGN_CENTER);
 		addChild(&mText);
 
@@ -148,14 +156,17 @@ public:
 
 		if(mMultiSelect)
 		{
-			mRightArrow.setImage(":/arrow.svg");
+			mRightArrow.setImage(menuTheme->iconSet.arrow);
+			mRightArrow.setColorShift(color);
 			addChild(&mRightArrow);
 		}else{
-			mLeftArrow.setImage(":/option_arrow.svg");
+			mLeftArrow.setImage(menuTheme->iconSet.option_arrow);
+			mLeftArrow.setColorShift(color);
 			mLeftArrow.setFlipX(true);
 			addChild(&mLeftArrow);
 
-			mRightArrow.setImage(":/option_arrow.svg");
+			mRightArrow.setImage(menuTheme->iconSet.option_arrow);
+			mRightArrow.setColorShift(color);
 			addChild(&mRightArrow);
 		}
 
