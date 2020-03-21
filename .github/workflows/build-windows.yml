@@ -19,12 +19,23 @@ jobs:
           mkdir c:\src\downloads
           mkdir c:\src\lib
         shell: cmd
-      - name: Download Dependencies
-        run: |
-          Set-Location "C:\src\downloads"
-          Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
-          Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
-          (Get-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h).replace('#define snprintf _snprintf', '') | Set-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h
-          Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
-          Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
-        shell: powershell
+      - name: Download SDL
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: https://www.libsdl.org/release/SDL2-2.0.5.zip
+          location: C:\src\downloads
+      - name: Download FreeImage
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: http://downloads.sourceforge.net/freeimage/FreeImage3170.zip
+          location: C:\src\downloads
+      - name: Download FreeType
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz
+          location: C:\src\downloads
+      - name: Download curl
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: https://curl.haxx.se/download/curl-7.50.3.zip
+          location: C:\src\downloads
