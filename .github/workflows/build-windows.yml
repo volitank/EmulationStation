@@ -69,6 +69,8 @@ jobs:
           7z x c:\src\downloads\curl-7.50.3.zip -oc:\src\lib > NUL
           echo "Expanding rapidjson"
           7z x c:\src\downloads\rapidjson-v1.1.0.zip -oc:\src\lib > NUL
+          echo "Expanding SDL2"
+          7z x SDL2-2.0.5.zip -oc:\src\lib > NUL
           echo "Expanding VLC"
           7z x c:\src\downloads\vlc-2.2.2.zip -oc:\src\lib > NUL
         shell: cmd
