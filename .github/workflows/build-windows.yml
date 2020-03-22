@@ -71,6 +71,8 @@ jobs:
           echo "Expanding VLC"
           7z x c:\src\downloads\vlc-2.2.2.zip -oc:\src\lib > NUL
         shell: cmd
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
       - name: Build FreeType
         run: |
           cd c:\src\lib\freetype-2.7\builds\windows\vc2010
