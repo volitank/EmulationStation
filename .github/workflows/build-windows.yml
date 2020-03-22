@@ -18,6 +18,7 @@ jobs:
         run: |
           mkdir c:\src\downloads
           mkdir c:\src\lib
+          mkdir c:\src\lib\SDL2-2.0.5\build
         shell: cmd
       - name: Download SDL
         uses: carlosperate/download-file-action@v1.0.0
@@ -73,14 +74,9 @@ jobs:
         shell: cmd
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.0
-      - name: Pre-Build SDL 2
-        run: |
-          mkdir c:\src\lib\SDL2-2.0.5\build
-          cmake -G "Visual Studio 14 2015" ..
-        shell: cmd
-        working-directory: c:\src\lib\SDL2-2.0.5
       - name: Build SDL 2
         run: |
+          cmake -G "Visual Studio 14 2015" ..
           msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
         working-directory: c:\src\lib\SDL2-2.0.5\build
