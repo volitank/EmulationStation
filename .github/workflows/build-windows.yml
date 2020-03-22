@@ -75,6 +75,9 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.0
       - name: Build FreeType
         run: |
+          dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\"
+          dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\"
+          dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\"
           cd c:\src\lib\freetype-2.7\builds\windows\vc2010
           '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  freetype.sln /upgrade'
           msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
