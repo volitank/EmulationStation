@@ -64,7 +64,7 @@ jobs:
           7z x c:\src\downloads\freetype-2.7.tar.gz > NUL
           7z x c:\src\downloads\freetype-2.7.tar -oc:\src\lib > NUL
           7z x c:\src\downloads\curl-7.50.3.zip -oc:\src\lib > NUL
-          7z x c:\src\downloads\rapidjson-1.1.0.zip -oc:\src\lib > NUL
+          7z x c:\src\downloads\rapidjson-v1.1.0.zip -oc:\src\lib > NUL
           7z x c:\src\downloads\vlc-2.2.2-win32.zip -oc:\src\downloads
           # Fix vlc directory name
           cd c:\src\lib
