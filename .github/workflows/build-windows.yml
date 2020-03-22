@@ -89,13 +89,6 @@ jobs:
           msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
         working-directory: c:\src\lib\FreeImage
-      - name: Build curl
-        run: |
-          '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
-          nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
-          nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
-        shell: cmd
-        working-directory: c:\src\lib\curl-7.50.3\winbuild
       - name: Build SDL 2
         run: |
           mkdir build
@@ -105,6 +98,13 @@ jobs:
           "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
         working-directory: c:\src\lib\SDL2-2.0.5
+      - name: Build curl
+        run: |
+          '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
+          nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
+          nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
+        shell: cmd
+        working-directory: c:\src\lib\curl-7.50.3\winbuild
       - name: Build EmulationStation
         run: |
           cd c:\src\EmulationStation
