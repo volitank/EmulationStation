@@ -59,21 +59,19 @@ jobs:
       - name: Expand Downloads
         run: |
           cd c:\src\downloads
-          dir c:\src\downloads
-          echo "1"
+          echo "Expanding FreeImage..."
           7z x c:\src\downloads\FreeImage3170.zip -oc:\src\lib > NUL
-          echo "2"
+          echo "Expanding FreeType..."
           7z x c:\src\downloads\freetype-2.7.tar.gz -oc:\src\downloads > NUL
-          echo "3"
           7z x c:\src\downloads\freetype-2.7.tar -oc:\src\lib > NUL
-          echo "4"
+          echo "Expanding curl"
           7z x c:\src\downloads\curl-7.50.3.zip -oc:\src\lib > NUL
-          echo "5"
+          echo "Expanding rapidjson"
           7z x c:\src\downloads\rapidjson-v1.1.0.zip -oc:\src\lib > NUL
-          echo "6"
+          echo "VLC"
           7z x c:\src\downloads\vlc-2.2.2-win32.zip -oc:\src\downloads > NUL
-          echo "7"
           cd c:\src\lib
+          dir c:\src\lib
           rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
         shell: cmd
       - name: Build FreeType
