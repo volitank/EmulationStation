@@ -69,7 +69,7 @@ jobs:
           echo "Expanding rapidjson"
           7z x c:\src\downloads\rapidjson-v1.1.0.zip -oc:\src\lib > NUL
           echo "Expanding VLC"
-          7z x c:\src\downloads\vlc-2.2.0.zip -oc:\src\downloads > NUL
+          7z x c:\src\downloads\vlc-2.2.0.zip -oc:\src\lib > NUL
           cd c:\src\lib
           dir c:\src\lib
           rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
