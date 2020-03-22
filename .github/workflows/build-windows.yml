@@ -76,17 +76,13 @@ jobs:
       - name: Build FreeType
         run: |
           cd c:\src\lib\freetype-2.7\builds\windows\vc2010
-        
-          dir "C:\Program Files (x86)\Microsoft Visual Studio\"
-          dir "C:\Program Files (x86)\Microsoft Visual Studio\2019"
-          dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"
-          '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\devenv.com"  freetype.sln /upgrade'
+          '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  freetype.sln /upgrade'
           msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
       - name: Build FreeImage
         run: |
           cd c:\src\lib\FreeImage
-          '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
+          '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
           msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
       - name: Build curl
