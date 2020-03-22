@@ -78,9 +78,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.0
       - name: Build SDL 2
         run: |
-          dir c:\src\lib
-          dir c:\src\lib\SDL2-2.0.5
           cmake -G "Visual Studio 14 2015" ..
+          "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  SDL2.sln /upgrade
           msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
         working-directory: c:\src\lib\SDL2-2.0.5\build
