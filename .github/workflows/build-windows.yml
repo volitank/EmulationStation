@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        platfrom: [win32, x64]
+        platfrom: [win32] #[win32, x64]
     env:
       CONFIGURATION: Release
       PLATFORM: ${{ matrix.platform }}
@@ -39,3 +39,34 @@ jobs:
         with:
           file-url: https://curl.haxx.se/download/curl-7.50.3.zip
           location: C:\src\downloads
+      - name: Download rapidjson
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: https://github.com/Tencent/rapidjson/archive/v1.1.0.zip
+          file-name: rapid-json-v1.1.0.zip 
+          location: C:\src\downloads
+      - name: Download VLC
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip
+          file-name:  vlc-2.2.0.zip
+          location: C:\src\downloads
+      - name: Download VLC
+        uses: carlosperate/download-file-action@v1.0.0
+        with:
+          file-url: http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip
+          location: C:\src\downloads
+      - name: Expand Downloads
+        run: |
+          cd c:\src\downloads
+          dir c:\src\downloads
+          7z x FreeImage3170.zip -oc:\src\lib > NUL
+          7z x freetype-2.7.tar.gz > NUL
+          7z x freetype-2.7.tar -oc:\src\lib > NUL
+          7z x curl-7.50.3.zip -oc:\src\lib > NUL
+          7z x rapidjson-1.1.0.zip -oc:\src\lib > NUL
+          7z x vlc-2.2.2-win32.zip -oc:\src\downloads
+          # Fix vlc directory name
+          cd c:\src\lib
+          rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
+        shell: cmd
