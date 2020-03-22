@@ -43,7 +43,7 @@ jobs:
         uses: carlosperate/download-file-action@v1.0.0
         with:
           file-url: https://github.com/Tencent/rapidjson/archive/v1.1.0.zip
-          file-name: rapid-json-v1.1.0.zip 
+          file-name: rapidjson-v1.1.0.zip 
           location: C:\src\downloads
       - name: Download VLC
         uses: carlosperate/download-file-action@v1.0.0
@@ -61,7 +61,7 @@ jobs:
           cd c:\src\downloads
           dir c:\src\downloads
           7z x c:\src\downloads\FreeImage3170.zip -oc:\src\lib > NUL
-          7z x c:\src\downloads\freetype-2.7.tar.gz > NUL
+          7z x c:\src\downloads\freetype-2.7.tar.gz -oc:\src\downloads > NUL
           7z x c:\src\downloads\freetype-2.7.tar -oc:\src\lib > NUL
           7z x c:\src\downloads\curl-7.50.3.zip -oc:\src\lib > NUL
           7z x c:\src\downloads\rapidjson-v1.1.0.zip -oc:\src\lib > NUL
