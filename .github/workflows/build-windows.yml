@@ -2,10 +2,10 @@ name: CI
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2016
     strategy:
       matrix:
-        platfrom: [win32] #[win32, x64]
+        platfrom: [win32]
     env:
       CONFIGURATION: Release
       PLATFORM: ${{ matrix.platform }}
@@ -91,7 +91,7 @@ jobs:
         working-directory: c:\src\lib\curl-7.50.3\winbuild
       - name: Build FreeType
         run: |
-          "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  freetype.sln /upgrade
+          "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"  freetype.sln /upgrade
           msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
         working-directory: c:\src\lib\freetype-2.7\builds\windows\vc2010
         shell: cmd
@@ -101,7 +101,7 @@ jobs:
         shell: powershell
       - name: Build FreeImage
         run: |
-          "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade
+          "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade
           msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
         shell: cmd
         working-directory: c:\src\lib\FreeImage
@@ -114,4 +114,4 @@ jobs:
           set ES_LIB_DIR=c:\src\lib
           cmake -g "Visual Studio 14 2015 x86" .. -DFREETYPE_INCLUDE_DIRS=%ES_LIB_DIR%\freetype-2.7\include -DFREETYPE_LIBRARY=%ES_LIB_DIR%\freetype-2.7\objs\vc2010\Win32\freetype27.lib -DFreeImage_INCLUDE_DIR=%ES_LIB_DIR%\FreeImage\Source -DFreeImage_LIBRARY=%ES_LIB_DIR%\FreeImage\Dist\x32\FreeImage.lib -DSDL2_INCLUDE_DIR=%ES_LIB_DIR%\SDL2-2.0.5\include -DSDL2_LIBRARY=%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2.lib;%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2main.lib;Imm32.lib;version.lib -DCURL_INCLUDE_DIR=%ES_LIB_DIR%\curl-7.50.3\include -DCURL_LIBRARY=%ES_LIB_DIR%\curl-7.50.3\builds\libcurl-vc14-x86-release-dll-ipv6-sspi-winssl\lib\libcurl.lib -DRAPIDJSON_INCLUDE_DIRS=%ES_LIB_DIR%\rapidjson-1.1.0\include -DVLC_INCLUDE_DIR=%ES_LIB_DIR%\libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2\include -DVLC_LIBRARIES=%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlc.lib;%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlccore.lib -DVLC_VERSION=1.0.0     
           cd c:\src\EmulationStation\build
-          '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
+          msbuild emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"
