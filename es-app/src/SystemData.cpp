@@ -175,7 +175,7 @@ bool SystemData::loadConfig()
 
 	if(!Utils::FileSystem::exists(path))
 	{
-		LOG(LogError) << "es_systems.cfg file does not exist!";
+		LOG(LogError) << "es_systems_linux.cfg file does not exist!";
 		writeExampleConfig(getConfigPath(true));
 		return false;
 	}
@@ -185,7 +185,7 @@ bool SystemData::loadConfig()
 
 	if(!res)
 	{
-		LOG(LogError) << "Could not parse es_systems.cfg file!";
+		LOG(LogError) << "Could not parse es_systems_linux.cfg file!";
 		LOG(LogError) << res.description();
 		return false;
 	}
@@ -195,7 +195,7 @@ bool SystemData::loadConfig()
 
 	if(!systemList)
 	{
-		LOG(LogError) << "es_systems.cfg is missing the <systemList> tag!";
+		LOG(LogError) << "es_systems_linux.cfg is missing the <systemList> tag!";
 		return false;
 	}
 
@@ -334,11 +334,11 @@ void SystemData::deleteSystems()
 
 std::string SystemData::getConfigPath(bool forWrite)
 {
-	std::string path = Utils::FileSystem::getHomePath() + "/.emulationstation/es_systems.cfg";
+	std::string path = Utils::FileSystem::getHomePath() + "/.emulationstation/es_systems_linux.cfg";
 	if(forWrite || Utils::FileSystem::exists(path))
 		return path;
 
-	return "/etc/emulationstation/es_systems.cfg";
+	return "/etc/emulationstation/es_systems_linux.cfg";
 }
 
 bool SystemData::isVisible()
